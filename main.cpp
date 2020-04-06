@@ -3,6 +3,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QFile>
 
 #include "CL/cl2.hpp"
 
@@ -25,6 +26,22 @@ int main(int argc, char *argv[])
     {
         qDebug() << device.getInfo<CL_DEVICE_NAME>().data();
     }
+
+    cl::Context context(devices.front());
+
+    QFile file("D:\\my_projects\\videos\\tutorials\\opencl\\kernel.cl");
+    file.open(QFile::ReadOnly);
+    auto arr = file.readAll();
+    QString source(arr);
+
+    cl_int err;
+    cl::Program program(context, arr.toStdString(), CL_TRUE, &err);
+
+    qDebug() << "Program: " << err;
+
+    cl::Kernel kernel(program, "test", &err);
+
+    qDebug() << "Kernel: " << err;
 
     return a.exec();
 }
