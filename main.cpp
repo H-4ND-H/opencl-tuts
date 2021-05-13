@@ -43,13 +43,13 @@ int main(int argc, char *argv[])
 
     qDebug() << "Kernel: " << err;
 
-    cl::KernelFunctor<> functor(kernel);
+    cl::KernelFunctor<cl_int> functor(kernel);
 
     cl::CommandQueue queue(context, devices.front());
 
-    cl::EnqueueArgs eargs(queue, cl::NDRange(5));
+    cl::EnqueueArgs eargs(queue, cl::NDRange(5, 5));
 
-    functor(eargs);
+    functor(eargs, 5);
 
     return a.exec();
 }
